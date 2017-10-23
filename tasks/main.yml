@@ -1,3 +1,27 @@
 ---
 # tasks file for tjcim.ansible-docker-gunicorn
 
+# Build docker image
+- name: Build flask image
+  docker_image:
+    path: /vagrant/flask
+    state: present
+    name: flask
+    buildargs:
+      SERVICE_NAME: "flask"
+      SERVICE_VERSION: "0.1"
+
+# Run docker container using Image
+- name: Start Flask image
+  become: yes
+  become_method: sudo
+  docker_container:
+    name: flask
+    image: flask
+    state: started
+    restart_policy: always
+    env:
+      PYTHONUNBUFFERED: 1
+      SERVICE_NAME: flask
+    published_ports:
+      5000
