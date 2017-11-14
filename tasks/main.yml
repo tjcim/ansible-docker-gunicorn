@@ -3,6 +3,8 @@
 
 # Build docker image
 - name: Build flask image
+  become: yes
+  become_method: sudo
   docker_image:
     path: /vagrant/flask
     state: present
